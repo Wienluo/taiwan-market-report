@@ -1,96 +1,36 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>台股投資研究</title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: auto;
-            padding: 40px 20px;
-            background: #f5f7fa;
-            color: #222;
-        }
-
-        h1 {
-            font-size: 32px;
-        }
-
-        .card {
-            background: white;
-            padding: 24px;
-            margin-top: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .date {
-            color: #666;
-        }
-
-        a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>台股投資研究｜MARKET NOTE</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
-    <h1>台股投資研究</h1>
-
-    <p>
-        Taiwan Market Research Dashboard
-    </p>
-
-
-    <div class="card">
-
-        <h2>最新日報</h2>
-
-        <p class="date">
-            2026 / 09 / 15
-        </p>
-
-    <h3>台股投資交易日報｜2026/09/15</h3>
-    
-    <p>
-        今日市場重點、產業趨勢與交易觀察。
-    </p>
-    
-    <p>
-        <a href="reports/2026-09-15.html">
-            閱讀完整日報 →
-        </a>
-    </p>
-
+  <a class="skip-link" href="#main">跳至主要內容</a>
+  <header class="site-header">
+    <div class="nav-inner">
+      <span class="wordmark">MARKET NOTE<span class="brand-dot" aria-hidden="true">.</span></span>
+      <nav aria-label="主要導覽">
+        <a href="index.html" aria-current="page">最新日報</a>
+        <a href="reports/index.html">日報</a>
+      </nav>
     </div>
-
-
-    <div class="card">
-
-        <h2>研究主題</h2>
-
-        <p>AI Server</p>
-        <p>ASIC</p>
-        <p>PCB / ABF / CCL</p>
-        <p>CPO / Silicon Photonics</p>
-        <p>Memory</p>
-        <p>Semiconductor Equipment</p>
-
-    </div>
-
-
+  </header>
+  <main id="main" class="page home">
+    <section class="page-heading" aria-labelledby="site-title">
+      <p class="eyebrow">DAILY TAIWAN MARKET RESEARCH</p>
+      <h1 id="site-title">台股投資交易日報</h1>
+      <p class="intro">市場脈動、產業趨勢與交易觀察。</p>
+    </section>
+    <article class="latest-report" aria-labelledby="latest-title">
+      <div class="report-meta"><span class="label">最新日報</span><time datetime="2026-09-15">2026.09.15</time></div>
+      <h2 id="latest-title"><a href="reports/2026-09-15.html">台股投資交易日報<span class="title-date">2026 / 09 / 15</span></a></h2>
+      <p class="summary">今日市場重點、產業趨勢與交易觀察。</p>
+      <a class="read-link" href="reports/2026-09-15.html">閱讀完整日報 <span aria-hidden="true">→</span></a>
+    </article>
+  </main>
+  <footer class="site-footer"><span>MARKET NOTE</span><span>台股投資研究</span></footer>
 </body>
-
 </html>
