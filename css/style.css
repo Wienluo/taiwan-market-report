@@ -42,6 +42,7 @@ h1 { margin: 0; font-size: clamp(30px, 4vw, 44px); letter-spacing: -.035em; }
 .breadcrumb a { color: var(--muted); }
 .archive-year { border-top: 1px solid var(--border); padding-top: 30px; display: grid; grid-template-columns: 130px 1fr; gap: 30px; }
 .archive-year > h2 { margin: 0; font-size: 26px; }
+.archive-year > .archive-month { grid-column: 2; }
 .archive-month h3 { margin: 4px 0 24px; font-size: 18px; }
 .archive-month h3 span { color: var(--muted); font-size: 12px; font-weight: 400; margin-left: 12px; }
 .report-list { padding: 0; margin: 0; list-style: none; }
@@ -77,6 +78,7 @@ h1 { margin: 0; font-size: clamp(30px, 4vw, 44px); letter-spacing: -.035em; }
   .latest-report { padding: 30px 0; }
   .breadcrumb { margin-bottom: 36px; gap: 9px; font-size: 12px; }
   .archive-year { grid-template-columns: 1fr; gap: 24px; }
+  .archive-year > .archive-month { grid-column: 1; }
   .report-list a { grid-template-columns: 62px 1fr 16px; gap: 10px; padding: 18px 4px; font-size: 14px; }
   .site-footer { margin: 0 20px; padding: 24px 0; }
 }
