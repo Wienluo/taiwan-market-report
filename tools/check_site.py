@@ -1,7 +1,8 @@
 """Verify published paths, internal links and catalog before deploying."""
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlsplit, unquote
+from urllib.parse import urlsplit, unquote, parse_qs
+import hashlib
 import json
 import re
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +21,8 @@ class Links(HTMLParser):
 def check():
     errors = []
     pages = {}
+    versions = {(ROOT/path).resolve():hashlib.sha256((ROOT/path).read_bytes()).hexdigest()[:12]
+                for path in ['css/style.css','js/site.js','js/catalog.js','js/research-catalog.js']}
     for file in ROOT.rglob('*.html'):
         parser = Links()
         parser.feed(file.read_text(encoding='utf-8'))
@@ -31,6 +34,8 @@ def check():
             target = (file.parent/unquote(url.path)).resolve() if url.path else file
             if target.is_dir(): target = target/'index.html'
             if not target.is_file(): errors.append(f'{file.relative_to(ROOT)}: missing {value}')
+            if target in versions and parse_qs(url.query).get('v') != [versions[target]]:
+                errors.append(f'{file.relative_to(ROOT)}: stale asset version {value}')
             if url.fragment and target in pages and not re.fullmatch(r'section-\d+',url.fragment):
                 if unquote(url.fragment) not in pages[target].ids:
                     errors.append(f'{file.relative_to(ROOT)}: missing anchor {value}')

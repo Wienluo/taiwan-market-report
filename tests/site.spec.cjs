@@ -81,13 +81,13 @@ const server = http.createServer((req, res) => {
     const metadata = JSON.parse(fs.readFileSync(path.join(root,'js/catalog.js'),'utf8').split('window.MARKET_CATALOG = ')[1].replace(/;\s*$/, ''));
     const sampleOpinion = (date,title) => ({ path: 'perspectives/' + date + '.html', date, kind: 'perspective', title, excerpt: '測試摘要', companies: [], industries: [], perspective: {market:'測試盤勢',focus:'測試方向',risk:'測試風險',falsification:'測試條件'} });
     const fixture = {...metadata,records:[sampleOpinion('2000-01-02','測試新版觀點'),sampleOpinion('2000-01-01','測試舊版觀點'),...metadata.records]};
-    await page.route('**/js/catalog.js', route => route.fulfill({contentType:'text/javascript',body:'window.MARKET_CATALOG = '+JSON.stringify(fixture)+';'}));
+    await page.route('**/js/catalog.js*', route => route.fulfill({contentType:'text/javascript',body:'window.MARKET_CATALOG = '+JSON.stringify(fixture)+';'}));
     await page.goto(base + '/');
     assert.ok(await page.getByRole('heading', { name: '測試新版觀點' }).isVisible(), 'Published opinion replaces homepage empty state');
     await page.goto(base + '/perspectives/');
     assert.equal(await page.locator('.research-result').count(), 2, 'Prior opinion versions remain available');
     assert.ok(await page.getByText('測試風險', { exact: true }).isVisible(), 'Structured opinion summary');
-    await page.unroute('**/js/catalog.js');
+    await page.unroute('**/js/catalog.js*');
     for (const width of [1280, 768, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
       for (const route of ['/', '/perspectives/', '/research/', '/reports/', '/broker-reports/', '/reports/2026-10-08.html']) {
@@ -97,10 +97,10 @@ const server = http.createServer((req, res) => {
       }
     }
     assert.deepEqual(errors, [], 'No client JavaScript errors');
-    await page.route('**/js/research-catalog.js', route => route.abort());
+    await page.route('**/js/research-catalog.js*', route => route.abort());
     await page.goto(base + '/research/');
     assert.ok(await page.getByRole('heading', { name: '搜尋暫時無法載入' }).isVisible(), 'Catalog failure preserves archive navigation');
-    await page.unroute('**/js/research-catalog.js');
+    await page.unroute('**/js/research-catalog.js*');
     const noJs = await browser.newContext({ javaScriptEnabled: false });
     const plain = await noJs.newPage();
     await plain.goto(base + '/reports/2026-10-08.html');

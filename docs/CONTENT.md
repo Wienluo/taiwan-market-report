@@ -42,3 +42,5 @@ node tests/site.spec.cjs
 Python checks need no third-party packages. Integration tests require Playwright; `CODEX_PRIMARY_RUNTIME_NODE_MODULES` may locate it. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select installed Chromium. Verify browser reading, search and responsive behavior before publishing.
 
 The builder emits lightweight `js/catalog.js` for reading pages and `js/research-catalog.js` with full text for the research page. Other pages do not download the entire search corpus.
+
+The same build gives shared CSS and scripts a content-hash version in every HTML URL. Rebuilding after a content or design change prevents browsers from mixing a new page with cached older assets.

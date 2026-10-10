@@ -3,6 +3,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 import json
 import re
+import hashlib
 
 ROOT = Path(__file__).resolve().parents[1]
 COMPANIES = {
@@ -112,6 +113,17 @@ def build():
     lightweight = {**payload,'records':[{key:value for key,value in record.items() if key!='text'} for record in records]}
     small = json.dumps(lightweight,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
     (ROOT/'js'/'catalog.js').write_text('// Generated lightweight metadata; full text loads on the research page only.\nwindow.MARKET_CATALOG = '+small+';\n',encoding='utf-8')
-    print(f'Indexed {len(records)} published articles.')
+    # GitHub Pages and browsers may retain an asset for several minutes. Version by content.
+    assets = ['css/style.css','js/catalog.js','js/research-catalog.js','js/site.js']
+    versions = {asset:hashlib.sha256((ROOT/asset).read_bytes()).hexdigest()[:12] for asset in assets}
+    pattern = re.compile(r'((?:href|src)=")((?:\.\./)?(?:css/style\.css|js/(?:catalog|research-catalog|site)\.js))(?:\?[^"\s]*)?(")')
+    for page in ROOT.rglob('*.html'):
+        source = page.read_text(encoding='utf-8')
+        def version(match):
+            relative = match[2]
+            asset = relative.removeprefix('../')
+            return match[1]+relative+'?v='+versions[asset]+match[3]
+        page.write_text(pattern.sub(version,source),encoding='utf-8')
+    print(f'Indexed {len(records)} published articles; versioned shared assets.')
 
 if __name__ == '__main__': build()
