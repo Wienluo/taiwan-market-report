@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light"><meta name="description" content="搜尋台股日報與券商研究全文，以公司、產業及日期篩選。">
+  <title>研究資料庫｜MARKET NOTE</title><link rel="stylesheet" href="../css/style.css">
+  <script defer src="../js/research-catalog.js"></script><script defer src="../js/site.js"></script>
+</head><body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+<header class="site-header"><div class="nav-inner">
+  <a class="wordmark" href="../index.html" aria-label="MARKET NOTE 研究首頁">MARKET NOTE<span class="brand-dot" aria-hidden="true">.</span><small>台股投資研究手札</small></a>
+  <nav aria-label="主要導覽"><a href="../index.html">首頁</a><a href="../perspectives/index.html">我的觀點</a><a href="../reports/index.html">台股日報</a><a href="../broker-reports/index.html">券商報告</a><a href="../research/index.html" aria-current="page">研究資料庫</a></nav>
+</div></header>
+<main id="main" class="page research-page">
+  <header class="page-heading"><p class="eyebrow">Research archive</p><h1>研究資料庫</h1><p class="intro">以日期、公司與產業，找到值得重新對照的證據。</p></header>
+  <form id="research-form" class="search-panel" role="search">
+    <div class="search-row"><label for="query">全文搜尋</label><input id="query" name="q" type="search" placeholder="公司名稱、代號或關鍵字" autocomplete="off">
+      <button id="clear-search" class="search-clear" type="button" hidden aria-label="清除搜尋">清除</button><button class="button primary search-submit" type="submit">搜尋</button>
+    </div>
+    <div class="filters">
+      <div class="filter-field"><label for="kind">文章類型</label><select id="kind" name="kind"><option value="">全部文章</option value="daily">台股日報</option><option value="broker">券商研究</option><option value="perspective">我的觀點</option></select></div>
+      <div class="filter-field"><label for="company">公司</label><select id="company" name="company"><option value="">全部公司</option></select></div>
+      <div class="filter-field"><label for="industry">產業</label><select id="industry" name="industry"><option value="">全部產業</option></select></div>
+      <div class="filter-field"><label for="month">日期</label><select id="month" name="month"><option value="">全部月份</option></select></div>
+    </div>
+    <p class="search-note">標籤表示文章提及的公司與產業。多個關鍵字以空格分開；條件會一起篩選。</p>
+  </form>
+  <div class="results-heading"><p id="result-count" role="status" aria-live="polite">搜尋既有研究</p><button id="reset-filters" class="button" type="button">重設篩選</button></div>
+  <div id="research-results"></div>
+  <div id="no-results" class="empty-panel no-results" hidden><h2>沒有符合的研究。</h2><p>試試其他關鍵字，或移除公司、產業與日期限制。</p><button id="empty-reset" class="button" type="button">查看全部研究</button></div>
+  <button id="load-more" class="button load-more" type="button" hidden>顯示更多</button>
+  <div id="search-fallback" class="empty-panel" hidden><h2>搜尋暫時無法載入</h2><p>請重新整理，或先依日期閱讀文章。</p><a href="../reports/index.html">台股日報</a> · <a href="../broker-reports/index.html">券商研究</a></div>
+  <noscript><style>#research-form,.results-heading{display:none}</style><div class="empty-panel"><h2>依日期閱讀研究</h2><p>啟用 JavaScript 後可以使用全文搜尋與篩選。</p><a href="../reports/index.html">台股日報</a> · <a href="../broker-reports/index.html">券商研究</a></div></noscript>
+</main>
+<footer class="site-footer"><span>MARKET NOTE · 台股投資研究手札</span><span>個人觀點與每日研究，分開記錄。</span></footer>
+</body></html>

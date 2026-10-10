@@ -1,37 +1,55 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light">
-  <title>台股投資研究｜MARKET NOTE</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <a class="skip-link" href="#main">跳至主要內容</a>
-  <header class="site-header">
-    <div class="nav-inner">
-      <span class="wordmark">MARKET NOTE<span class="brand-dot" aria-hidden="true">.</span></span>
-      <nav aria-label="主要導覽">
-        <a href="index.html" aria-current="page">最新日報</a>
-        <a href="reports/index.html">日報</a>
-        <a href="broker-reports/index.html">券商報告</a>
-      </nav>
+<html lang="zh-TW"><head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light"><meta name="description" content="個人盤面觀點、台股日報與券商研究。依公司、產業、日期搜尋歷史證據。">
+  <title>台股投資研究手札｜MARKET NOTE</title><link rel="stylesheet" href="css/style.css">
+  <script defer src="js/catalog.js"></script><script defer src="js/site.js"></script>
+</head><body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+<header class="site-header"><div class="nav-inner">
+  <a class="wordmark" href="index.html" aria-label="MARKET NOTE 研究首頁">MARKET NOTE<span class="brand-dot" aria-hidden="true">.</span><small>台股投資研究手札</small></a>
+  <nav aria-label="主要導覽"><a href="index.html" aria-current="page">首頁</a><a href="perspectives/index.html">我的觀點</a><a href="reports/index.html">台股日報</a><a href="broker-reports/index.html">券商報告</a><a href="research/index.html">研究資料庫</a></nav>
+</div></header>
+<main id="main" class="page home">
+  <section aria-labelledby="perspective-title">
+    <div class="page-heading heading-row"><div><p class="eyebrow">Personal perspective</p>
+      <h1 id="perspective-title">我的盤面觀點</h1><p class="intro">保留當下的判斷，讓新證據有地方對照。</p></div>
+      <a class="text-link" href="perspectives/index.html">觀點紀錄 ↗</a>
     </div>
-  </header>
-  <main id="main" class="page home">
-    <section class="page-heading" aria-labelledby="site-title">
-      <p class="eyebrow">DAILY TAIWAN MARKET RESEARCH</p>
-      <h1 id="site-title">台股投資交易日報</h1>
-      <p class="intro">市場脈動、產業趨勢與交易觀察。</p>
+    <div class="thesis" data-perspective-latest>
+  <div class="thesis-main"><span class="status">尚未發布</span>
+    <h2 class="empty-title">下一篇觀點，從你的判斷開始。</h2>
+    <p class="empty-copy">新增後，這裡會呈現你的觀點摘要；完整文章與每次更新的版本都會保留。</p>
+    <p class="note-meta">不定期更新 · 尚無更新紀錄</p>
+  </div>
+  <dl class="thesis-index">
+    <div class="index-row"><dt>盤勢判斷</dt><dd>待新增</dd></div>
+    <div class="index-row"><dt>關注方向</dt><dd>待新增</dd></div>
+    <div class="index-row"><dt>主要風險</dt><dd>待新增</dd></div>
+    <div class="index-row"><dt>改變看法</dt><dd>待新增</dd></div>
+  </dl>
+</div>
+  </section>
+  <div class="home-research">
+    <section aria-labelledby="daily-title">
+      <div class="section-heading"><h2 id="daily-title">最新台股日報</h2><a class="text-link" href="reports/index.html">全部日報 ↗</a></div>
+      <div data-latest-daily><article class="latest-report">
+        <div class="report-meta"><time datetime="2026-10-08">2026 / 10 / 08</time><span>· 最終收盤版</span></div>
+        <h3><a href="reports/2026-10-08.html">震盪偏防守，觀察成長股對利多的反應</a></h3>
+        <p class="summary">外資賣超與融資增加背離；國巨拒絕利多、川湖續弱。深讀高階 PCB 與現金流，分開追蹤收盤後新資訊。</p>
+        <div class="tags"><a class="tag" href="research/?industry=PCB%EF%BC%8FABF%EF%BC%8FCCL">PCB／ABF／CCL</a><a class="tag" href="research/?industry=MLCC%EF%BC%8F%E8%A2%AB%E5%8B%95%E5%85%83%E4%BB%B6">被動元件</a><a class="tag" href="research/?company=%E5%8F%B0%E7%A9%8D%E9%9B%BB">台積電</a><a class="tag" href="research/?company=%E5%9C%8B%E5%B7%A8">國巨</a></div>
+        <a class="button primary" href="reports/2026-10-08.html">閱讀日報 →</a>
+      </article></div>
     </section>
-    <article class="latest-report" aria-labelledby="latest-title">
-      <div class="report-meta"><span class="label">最新日報</span><time datetime="2026-10-08">2026.10.08</time></div>
-      <h2 id="latest-title"><a href="reports/2026-10-08.html">台股投資交易日報<span class="title-date">2026 / 10 / 08</span></a></h2>
-      <p class="summary">10/08 收盤版：震盪偏防守；外資賣超與融資增加背離，國巨拒絕利多、川湖續弱；深讀高階PCB與現金流，分開追蹤收盤後新資訊。</p>
-      <a class="read-link" href="reports/2026-10-08.html">閱讀完整日報 <span aria-hidden="true">→</span></a>
-    </article>
-  </main>
-  <footer class="site-footer"><span>MARKET NOTE</span><span>台股投資研究</span></footer>
-</body>
-</html>
+    <section aria-labelledby="broker-title"><div class="section-heading"><h2 id="broker-title">券商研究</h2><a class="text-link" href="broker-reports/index.html">全部研究 ↗</a></div>
+      <ul class="broker-list" data-latest-brokers>
+        <li><a href="broker-reports/2026-10-08.html"><span>券商投資早報整理<small>依日期閱讀研究摘要</small></span><time datetime="2026-10-08">10 / 08 ↗</time></a></li>
+        <li><a href="broker-reports/2026-10-07.html"><span>券商投資早報整理</span><time datetime="2026-10-07">10 / 07 ↗</time></a></li>
+        <li><a href="broker-reports/2026-10-06.html"><span>券商投資早報整理</span><time datetime="2026-10-06">10 / 06 ↗</time></a></li>
+      </ul>
+      <p class="search-note"><a class="text-link" href="research/index.html">按公司與產業查找研究 →</a></p>
+    </section>
+  </div>
+</main>
+<footer class="site-footer"><span>MARKET NOTE · 台股投資研究手札</span><span>個人觀點與每日研究，分開記錄。</span></footer>
+</body></html>

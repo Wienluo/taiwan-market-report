@@ -1,0 +1,115 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const http = require('node:http');
+const runtime = process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES;
+const { chromium } = require(runtime ? path.join(runtime, 'playwright') : 'playwright');
+const root = path.resolve(__dirname, '..');
+const server = http.createServer((req, res) => {
+  const url = new URL(req.url, 'http://localhost');
+  let file = path.resolve(root, '.' + decodeURIComponent(url.pathname));
+  if (!file.startsWith(root + path.sep) && file !== root) { res.writeHead(403).end(); return; }
+  if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
+  if (!fs.existsSync(file)) { res.writeHead(404).end(); return; }
+  const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json' };
+  res.setHeader('Content-Type', mime[path.extname(file)] || 'text/plain');
+  res.end(fs.readFileSync(file));
+});
+(async () => {
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined, args: ['--no-sandbox'] });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 960 } });
+    const errors = []; page.on('pageerror', e => errors.push(e.message));
+    await page.goto(base + '/');
+    assert.equal(await page.getByRole('heading', { name: '我的盤面觀點', exact: true }).count(), 1, 'Homepage must prioritize personal perspective');
+    assert.equal(await page.getByText('尚未發布', { exact: true }).count(), 1, 'No fabricated first opinion');
+    await page.getByRole('link', { name: '我的觀點', exact: true }).click();
+    assert.equal(await page.getByRole('heading', { name: '尚未新增第一篇觀點' }).count(), 1, 'Opinion empty state');
+    await page.goto(base + '/reports/2026-10-08.html');
+    const sections = page.locator('.report-section');
+    assert.equal(await sections.count(), 21, 'All report chapters must remain available');
+    await page.getByRole('button', { name: '展開全部', exact: true }).click();
+    assert.equal(await page.locator('.report-section[open]').count(), 21, 'Expand all chapters');
+    await page.getByRole('button', { name: '收合全部', exact: true }).click();
+    assert.equal(await page.locator('.report-section[open]').count(), 0, 'Collapse all chapters');
+    await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+    assert.equal(await page.locator('.report-section[open]').count(), 21, 'Print includes every chapter');
+    await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+    assert.equal(await page.locator('.report-section[open]').count(), 0, 'Print restores reading state');
+    await page.goto(base + '/research/');
+    await page.getByRole('searchbox').fill('國巨');
+    await page.getByRole('searchbox').press('Enter');
+    assert.ok((await page.locator('.research-result').count()) > 0, 'Search existing report text');
+    assert.ok(new URL(page.url()).searchParams.get('q') === '國巨', 'Search state is restorable');
+    await page.reload();
+    assert.equal(await page.getByRole('searchbox').inputValue(), '國巨', 'Query survives reload');
+    await page.getByRole('searchbox').fill('不存在的公司XYZ');
+    await page.getByRole('searchbox').press('Enter');
+    assert.ok(await page.getByText('沒有符合的研究。').isVisible(), 'No-result recovery state');
+    await page.getByRole('button', { name: '清除搜尋', exact: true }).click();
+    await page.getByLabel('公司').selectOption('國巨');
+    assert.ok((await page.locator('.research-result').count()) > 0, 'Company filter');
+    await page.getByLabel('產業').selectOption('MLCC／被動元件');
+    assert.ok((await page.locator('.research-result').count()) > 0, 'Industry and company filters combine');
+    await page.getByRole('button', { name: '重設篩選', exact: true }).click();
+    assert.equal(await page.locator('.research-result').count(), 12, 'Bounded initial results');
+    await page.getByRole('button', { name: /顯示更多/ }).click();
+    assert.equal(await page.locator('.research-result').count(), 24, 'Load next research batch');
+    await page.getByLabel('文章類型').selectOption('perspective');
+    assert.ok(await page.getByText('沒有符合的研究。').isVisible(), 'No fabricated opinions in search');
+    await page.goBack();
+    assert.equal(await page.getByLabel('文章類型').inputValue(), '', 'Back restores filter state');
+    await page.getByRole('searchbox').focus();
+    const beforeComposition = page.url();
+    await page.getByRole('searchbox').dispatchEvent('compositionstart');
+    await page.getByRole('searchbox').fill('國巨');
+    await page.getByRole('searchbox').press('Enter');
+    assert.equal(page.url(), beforeComposition, 'IME Enter never submits partial input');
+    await page.getByRole('searchbox').dispatchEvent('compositionend');
+    assert.equal(new URL(page.url()).searchParams.get('q'), '國巨', 'IME commits after composition');
+    await page.goto(base + '/broker-reports/2026-10-08.html');
+    await page.getByRole('button', { name: '收合全部', exact: true }).click();
+    await page.locator('nav[aria-label="本文目錄"] a[href="#chapter-3"]').click();
+    await page.waitForFunction(() => document.getElementById('chapter-3').closest('details').open);
+    assert.ok(await page.locator('.report-section').filter({ has: page.locator('#chapter-3') }).getAttribute('open') !== null, 'Existing anchors open collapsed chapters');
+    const section = page.locator('.report-section').filter({ has: page.locator('#chapter-2') });
+    await section.locator('summary').focus();
+    await page.keyboard.press('Enter');
+    assert.ok(await section.getAttribute('open') !== null, 'Keyboard disclosure');
+    const metadata = JSON.parse(fs.readFileSync(path.join(root,'js/catalog.js'),'utf8').split('window.MARKET_CATALOG = ')[1].replace(/;\s*$/, ''));
+    const sampleOpinion = (date,title) => ({ path: 'perspectives/' + date + '.html', date, kind: 'perspective', title, excerpt: '測試摘要', companies: [], industries: [], perspective: {market:'測試盤勢',focus:'測試方向',risk:'測試風險',falsification:'測試條件'} });
+    const fixture = {...metadata,records:[sampleOpinion('2000-01-02','測試新版觀點'),sampleOpinion('2000-01-01','測試舊版觀點'),...metadata.records]};
+    await page.route('**/js/catalog.js', route => route.fulfill({contentType:'text/javascript',body:'window.MARKET_CATALOG = '+JSON.stringify(fixture)+';'}));
+    await page.goto(base + '/');
+    assert.ok(await page.getByRole('heading', { name: '測試新版觀點' }).isVisible(), 'Published opinion replaces homepage empty state');
+    await page.goto(base + '/perspectives/');
+    assert.equal(await page.locator('.research-result').count(), 2, 'Prior opinion versions remain available');
+    assert.ok(await page.getByText('測試風險', { exact: true }).isVisible(), 'Structured opinion summary');
+    await page.unroute('**/js/catalog.js');
+    for (const width of [1280, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of ['/', '/perspectives/', '/research/', '/reports/', '/broker-reports/', '/reports/2026-10-08.html']) {
+        await page.goto(base + route);
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
+        assert.equal(overflow, false, `No page overflow at ${width}px: ${route}`);
+      }
+    }
+    assert.deepEqual(errors, [], 'No client JavaScript errors');
+    await page.route('**/js/research-catalog.js', route => route.abort());
+    await page.goto(base + '/research/');
+    assert.ok(await page.getByRole('heading', { name: '搜尋暫時無法載入' }).isVisible(), 'Catalog failure preserves archive navigation');
+    await page.unroute('**/js/research-catalog.js');
+    const noJs = await browser.newContext({ javaScriptEnabled: false });
+    const plain = await noJs.newPage();
+    await plain.goto(base + '/reports/2026-10-08.html');
+    assert.equal(await plain.locator('.article-content h2').count(), 21, 'Full article remains available without scripts');
+    await plain.setViewportSize({width:390,height:900});
+    assert.ok(await plain.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Script-free article table fallback');
+    await plain.goto(base + '/research/');
+    assert.ok(await plain.getByRole('heading', { name: '依日期閱讀研究' }).isVisible(), 'No-JavaScript archive fallback');
+    await noJs.close();
+    console.log('PASS: opinions, chapters, print, full-text search, filters, URL restoration, and 24 responsive route checks');
+  } finally { await browser.close(); server.close(); }
+})().catch(error => { console.error(error); server.close(); process.exitCode = 1; });
