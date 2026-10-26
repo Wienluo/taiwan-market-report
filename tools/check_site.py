@@ -49,6 +49,9 @@ def check():
         if not (ROOT/path).is_file(): errors.append(f'Missing catalog article: {path}')
         if not record['title'] or not record['text']: errors.append(f'Empty article: {path}')
         if not re.fullmatch(r'\d{4}-\d{2}-\d{2}',record['date']): errors.append(f'Invalid date: {path}')
+        if record['kind'] == 'video':
+            if not path.startswith('videos/') or not record.get('topics') or not record.get('channel'):
+                errors.append(f'Incomplete video metadata: {path}')
     if errors: raise SystemExit('\n'.join(errors))
     print(f'PASS: {len(pages)} pages, all internal links and {len(seen)} indexed articles.')
 

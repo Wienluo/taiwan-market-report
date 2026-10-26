@@ -60,7 +60,7 @@ class ArticleParser(HTMLParser):
                 self.active = self.div_depth
         if tag == 'h1': self.in_title = True
         if tag == 'time' and not self.date: self.date = attrs.get('datetime','')
-        if tag == 'meta' and attrs.get('name','').startswith('perspective-'):
+        if tag == 'meta' and (attrs.get('name','').startswith('perspective-') or attrs.get('name','').startswith('video-')):
             self.meta[attrs['name']] = attrs.get('content','')
         if self.active and tag in ('p','li','h2','h3','h4','td','th','br'):
             self.words.append('\n')
@@ -79,7 +79,7 @@ class ArticleParser(HTMLParser):
 
 def build():
     records = []
-    for folder,kind in [('reports','daily'),('broker-reports','broker'),('perspectives','perspective')]:
+    for folder,kind in [('reports','daily'),('broker-reports','broker'),('perspectives','perspective'),('videos','video')]:
         for file in sorted((ROOT/folder).glob('????-??-??*.html')):
             parser = ArticleParser()
             parser.feed(file.read_text(encoding='utf-8'))
@@ -103,9 +103,14 @@ def build():
             if kind == 'perspective':
                 record['excerpt'] = parser.meta.get('perspective-summary',excerpt)
                 record['perspective'] = {key.removeprefix('perspective-'):value for key,value in parser.meta.items()}
+            if kind == 'video':
+                record['excerpt'] = parser.meta.get('video-summary',excerpt)
+                record['topics'] = [part.strip() for part in parser.meta.get('video-topics','').split('|') if part.strip()]
+                record['channel'] = parser.meta.get('video-channel','')
             records.append(record)
     records.sort(key=lambda r:(r['date'],r['path']),reverse=True)
-    payload = {'records':records,'companies':COMPANIES,'industries':list(INDUSTRIES)}
+    video_topics = ['交易策略','市場週期／市場結構','動能與相對強勢','總經與跨資產','產業與個股','交易心理與風險管理','交易系統與回測']
+    payload = {'records':records,'companies':COMPANIES,'industries':list(INDUSTRIES),'topics':video_topics}
     encoded = json.dumps(payload,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
     output = ROOT/'js'/'research-catalog.js'
     output.parent.mkdir(exist_ok=True)

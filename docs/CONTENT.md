@@ -44,3 +44,11 @@ Python checks need no third-party packages. Integration tests require Playwright
 The builder emits lightweight `js/catalog.js` for reading pages and `js/research-catalog.js` with full text for the research page. Other pages do not download the entire search corpus.
 
 The same build gives shared CSS and scripts a content-hash version in every HTML URL. Rebuilding after a content or design change prevents browsers from mixing a new page with cached older assets.
+
+## Video research
+
+Publish studies in `videos/YYYY-MM-DD-slug.html`, using the verified publisher/podcast date rather than the date an article was added. Maintain `videos/index.html` as a separate top-level archive and add its latest item to the homepage. The article needs direct-child `h2` chapter headings in `div.article-content`, regular shared navigation, and both shared scripts.
+
+Add HTML meta attributes `video-topics` (pipe-separated canonical tags), `video-channel`, `video-speaker`, and `video-summary`. The catalog builder indexes `videos/` into kind `video` and stores multiple `topics` plus `channel`. The site JS supports multiple topic checkboxes (OR within topics; AND with text/month), date search, home preview, and the unified research database's video/topic filters.
+
+Keep interview material, later Q&A, official competition performance, and academic evidence distinct. Never promote unverified promotional returns to independently verified statistics. State unclear original YouTube upload dates and partial-transcript limitations.
