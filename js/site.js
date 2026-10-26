@@ -6,7 +6,7 @@
   const catalog = window.MARKET_CATALOG;
   const records = catalog ? catalog.records : [];
   const urlFor = path => new URL(path, root).href;
-  const kindNames = { daily: '台股日報', broker: '券商研究', perspective: '我的觀點' };
+  const kindNames = { daily: '台股日報', broker: '券商研究', perspective: '我的觀點', video: '影片研究' };
   const dateLabel = date => date.replaceAll('-', ' / ');
   const node = (tag, className, text) => {
     const element = document.createElement(tag);
@@ -19,10 +19,10 @@
   };
   function tags(record, limit = 6) {
     const container = node('div', 'tags');
-    const entries = [...record.companies.map(value => ['company', value]), ...record.industries.map(value => ['industry', value])];
+    const entries = [...record.companies.map(value => ['company', value]), ...record.industries.map(value => ['industry', value]), ...(record.topics || []).map(value => ['topic', value])];
     entries.slice(0, limit).forEach(([key,value]) => {
       const query = new URLSearchParams({ [key]: value });
-      container.append(link(value, 'research/?' + query, 'tag'));
+      container.append(link(value, key === 'topic' ? 'videos/?' + query : 'research/?' + query, 'tag'));
     });
     return container;
   }
@@ -173,6 +173,67 @@
   const opinionHistory = document.querySelector('[data-perspective-history]');
   if (opinionHistory && opinions.length) opinionHistory.replaceChildren(...opinions.map(resultCard));
 
+
+  // Dated video archive: multiple selected topics are OR; month and text are AND.
+  const videoFilters = document.querySelector('#video-filter-form');
+  if (videoFilters) {
+    const entries = [...document.querySelectorAll('[data-video-entry]')];
+    const queryInput = document.querySelector('#video-query');
+    const monthInput = document.querySelector('#video-month');
+    const checks = [...videoFilters.querySelectorAll('input[name="topic"]')];
+    const count = document.querySelector('#video-result-count');
+    const empty = document.querySelector('#video-no-results');
+    const normal = s => s.normalize('NFKC').toLocaleLowerCase().trim();
+    const restore = () => {
+      const params = new URLSearchParams(location.search);
+      queryInput.value = params.get('q') || '';
+      monthInput.value = params.get('month') || '';
+      const selected = params.getAll('topic');
+      checks.forEach(c => { c.checked = selected.includes(c.value); });
+    };
+    const save = (push = false) => {
+      const url = new URL(location.href); url.search = '';
+      if (queryInput.value.trim()) url.searchParams.set('q',queryInput.value.trim());
+      if (monthInput.value) url.searchParams.set('month',monthInput.value);
+      checks.filter(c => c.checked).forEach(c => url.searchParams.append('topic',c.value));
+      if (url.href !== location.href) history[push ? 'pushState' : 'replaceState'](null,'',url);
+    };
+    const render = () => {
+      const terms = normal(queryInput.value).split(/\s+/).filter(Boolean);
+      const selected = checks.filter(c => c.checked).map(c => c.value);
+      let visible = 0;
+      entries.forEach(entry => {
+        const labels = entry.dataset.topics.split('|');
+        const matches = (!selected.length || selected.some(tag => labels.includes(tag)))
+          && (!monthInput.value || entry.dataset.date.startsWith(monthInput.value))
+          && terms.every(term => normal(entry.textContent+' '+entry.dataset.search).includes(term));
+        entry.hidden = !matches;
+        if (matches) visible++;
+      });
+      count.textContent = '找到 '+visible+' 篇影片研究';
+      empty.hidden = visible !== 0;
+    };
+    videoFilters.addEventListener('change', () => {save(true);render();});
+    queryInput.addEventListener('input', () => {save();render();});
+    videoFilters.addEventListener('submit',e => {e.preventDefault();save(true);render();});
+    videoFilters.addEventListener('reset',e => {e.preventDefault();queryInput.value='';monthInput.value='';checks.forEach(c=>{c.checked=false;});save(true);render();queryInput.focus();});
+    window.addEventListener('popstate',()=>{restore();render();});
+    restore();render();
+  }
+  const latestVideo = document.querySelector('[data-latest-video]');
+  if (latestVideo && catalog) {
+    const record = records.find(item => item.kind === 'video');
+    if (record && ![...latestVideo.querySelectorAll('a')].some(a => a.href === urlFor(record.path))) {
+      const card = node('article','latest-report video-home-card');
+      const meta = node('div','report-meta');
+      const time = node('time','',dateLabel(record.date));time.dateTime=record.date;
+      meta.append(time,node('span','',record.channel || '影片研究'));
+      const title = node('h3');title.append(link(record.title,record.path));
+      card.append(meta,title,node('p','summary',record.excerpt),tags(record,5),link('閱讀影片研究 →',record.path,'button primary'));
+      latestVideo.replaceChildren(card);
+    }
+  }
+
   const form = document.querySelector('#research-form');
   if (!form) return;
   const results = document.querySelector('#research-results');
@@ -188,12 +249,13 @@
   const count = document.querySelector('#result-count');
   const empty = document.querySelector('#no-results');
   const more = document.querySelector('#load-more');
-  const controls = Object.fromEntries(['kind','company','industry','month'].map(key => [key,form.elements.namedItem(key)]));
+  const controls = Object.fromEntries(['kind','company','industry','topic','month'].map(key => [key,form.elements.namedItem(key)]));
   const normalize = value => value.normalize('NFKC').toLocaleLowerCase().trim().replace(/\s+/g,' ');
-  const searchable = new Map(records.map(record => [record,normalize(record.title + ' ' + record.date + ' ' + record.text + ' ' + record.companies.join(' ') + ' ' + record.industries.join(' '))]));
+  const searchable = new Map(records.map(record => [record,normalize(record.title + ' ' + record.date + ' ' + record.text + ' ' + record.companies.join(' ') + ' ' + record.industries.join(' ') + ' ' + (record.topics || []).join(' ') + ' ' + (record.channel || ''))]));
   const usedCompanies = new Set(records.flatMap(record => record.companies));
   [...usedCompanies].sort((a,b) => a.localeCompare(b,'zh-TW')).forEach(value => controls.company.add(new Option(value + ' ' + catalog.companies[value],value)));
   catalog.industries.forEach(value => controls.industry.add(new Option(value,value)));
+  (catalog.topics || []).forEach(value => controls.topic.add(new Option(value,value)));
   [...new Set(records.map(record => record.date.slice(0,7)))].sort().reverse().forEach(value => controls.month.add(new Option(value.replace('-',' / '),value)));
   let limit = 12;
   let composing = false;
@@ -221,6 +283,7 @@
       (!controls.kind.value || record.kind === controls.kind.value) &&
       (!controls.company.value || record.companies.includes(controls.company.value)) &&
       (!controls.industry.value || record.industries.includes(controls.industry.value)) &&
+      (!controls.topic.value || (record.topics || []).includes(controls.topic.value)) &&
       (!controls.month.value || record.date.startsWith(controls.month.value)) &&
       terms.every(term => searchable.get(record).includes(term))
     );
