@@ -17,6 +17,12 @@
   const link = (text, path, className) => {
     const a = node('a', className, text); a.href = urlFor(path); return a;
   };
+  // Keep the global video menu visible on previously published dated pages.
+  const mainMenu = document.querySelector('nav[aria-label="主要導覽"]');
+  if (mainMenu && ![...mainMenu.querySelectorAll('a')].some(a=>a.textContent.trim()==='影片研究')) {
+    const brokerMenu = [...mainMenu.querySelectorAll('a')].find(a=>a.textContent.trim()==='券商報告');
+    if (brokerMenu) brokerMenu.after(link('影片研究','videos/index.html'));
+  }
   function tags(record, limit = 6) {
     const container = node('div', 'tags');
     const entries = [...record.companies.map(value => ['company', value]), ...record.industries.map(value => ['industry', value]), ...(record.topics || []).map(value => ['topic', value])];
