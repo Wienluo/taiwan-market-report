@@ -51,4 +51,4 @@ Publish studies in `videos/YYYY-MM-DD-slug.html`, using the verified publisher/p
 
 Add HTML meta attributes `video-topics` (pipe-separated canonical tags), `video-channel`, `video-speaker`, and `video-summary`. The catalog builder indexes `videos/` into kind `video` and stores multiple `topics` plus `channel`. The site JS supports multiple topic checkboxes (OR within topics; AND with text/month), date search, home preview, and the unified research database's video/topic filters.
 
-Keep interview material, later Q&A, official competition performance, and academic evidence distinct. Never promote unverified promotional returns to independently verified statistics. State unclear original YouTube upload dates and partial-transcript limitations.
+Do not embed YouTube iframes or video players in research articles; provide a plain external link to the original video instead. Keep interview material, later Q&A, official competition performance, and academic evidence distinct. Never promote unverified promotional returns to independently verified statistics. State unclear original YouTube upload dates and partial-transcript limitations.
