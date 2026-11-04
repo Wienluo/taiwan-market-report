@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 336" role="img" aria-labelledby="title desc" font-family="Microsoft JhengHei,Noto Sans TC,sans-serif">
+<title id="title">台股加權指數日線，2026 年 10 月 5 日至 11 月 4 日</title>
+<desc id="desc">加權由 10 月 6 日盤中高點 49,968.92 回落，11 月 4 日盤中低點 41,855.82，收在 42,948.91。近端觀察區取 11 月 3 日低點與 11 月 4 日高點。</desc>
+<rect width="680" height="336" fill="#ffffff"/>
+<path d="M67 35.44H631" stroke="#d5e1e4"/><text x="60" y="40.44" text-anchor="end" font-size="14" fill="#5d727d">50,000</text>
+<path d="M67 97.22H631" stroke="#d5e1e4"/><text x="60" y="102.22" text-anchor="end" font-size="14" fill="#5d727d">48,000</text>
+<path d="M67 159.00H631" stroke="#d5e1e4"/><text x="60" y="164.00" text-anchor="end" font-size="14" fill="#5d727d">46,000</text>
+<path d="M67 220.78H631" stroke="#d5e1e4"/><text x="60" y="225.78" text-anchor="end" font-size="14" fill="#5d727d">44,000</text>
+<path d="M67 282.56H631" stroke="#d5e1e4"/><text x="60" y="287.56" text-anchor="end" font-size="14" fill="#5d727d">42,000</text>
+<rect x="67" y="228.76" width="564" height="16.99" fill="#e6f1ee"/>
+<path d="M67 287.01H631" stroke="#176b65" stroke-dasharray="5 4"/>
+<path d="M84.00 42.53V79.46" stroke="#ab5352" stroke-width="1.8"/>
+<rect x="79.00" y="44.34" width="10" height="35.12" fill="#ab5352"/>
+<path d="M111.84 36.40V51.52" stroke="#ab5352" stroke-width="1.8"/>
+<rect x="106.84" y="40.93" width="10" height="2.66" fill="#ab5352"/>
+<text x="111.84" y="321" text-anchor="middle" font-size="15" fill="#5d727d">10/06</text>
+<path d="M139.68 36.47V48.80" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="134.68" y="39.85" width="10" height="1.57" fill="#4b7460"/>
+<path d="M167.53 42.15V60.47" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="162.53" y="42.15" width="10" height="14.51" fill="#4b7460"/>
+<path d="M195.37 53.58V73.47" stroke="#ab5352" stroke-width="1.8"/>
+<rect x="190.37" y="57.01" width="10" height="1.20" fill="#ab5352"/>
+<path d="M223.21 62.43V95.17" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="218.21" y="62.43" width="10" height="24.25" fill="#4b7460"/>
+<path d="M251.05 64.51V85.40" stroke="#ab5352" stroke-width="1.8"/>
+<rect x="246.05" y="77.89" width="10" height="7.51" fill="#ab5352"/>
+<path d="M278.89 85.40V134.43" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="273.89" y="85.40" width="10" height="43.64" fill="#4b7460"/>
+<text x="278.89" y="321" text-anchor="middle" font-size="15" fill="#5d727d">10/15</text>
+<path d="M306.74 112.03V128.26" stroke="#ab5352" stroke-width="1.8"/>
+<rect x="301.74" y="124.67" width="10" height="3.59" fill="#ab5352"/>
+<path d="M334.58 132.91V153.75" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="329.58" y="132.91" width="10" height="1.20" fill="#4b7460"/>
+<path d="M362.42 129.10V153.96" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="357.42" y="136.99" width="10" height="12.96" fill="#4b7460"/>
+<path d="M390.26 120.24V144.97" stroke="#ab5352" stroke-width="1.8"/>
+<rect x="385.26" y="131.58" width="10" height="13.39" fill="#ab5352"/>
+<path d="M418.11 117.85V157.72" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="413.11" y="129.88" width="10" height="27.84" fill="#4b7460"/>
+<text x="418.11" y="321" text-anchor="middle" font-size="15" fill="#5d727d">10/22</text>
+<path d="M445.95 140.92V168.99" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="440.95" y="152.48" width="10" height="3.55" fill="#4b7460"/>
+<path d="M473.79 126.24V146.56" stroke="#ab5352" stroke-width="1.8"/>
+<rect x="468.79" y="127.01" width="10" height="19.55" fill="#ab5352"/>
+<path d="M501.63 127.63V157.30" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="496.63" y="127.65" width="10" height="19.97" fill="#4b7460"/>
+<text x="501.63" y="321" text-anchor="middle" font-size="15" fill="#5d727d">10/29</text>
+<path d="M529.47 154.68V198.34" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="524.47" y="154.68" width="10" height="28.66" fill="#4b7460"/>
+<path d="M557.32 185.06V208.45" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="552.32" y="188.82" width="10" height="3.53" fill="#4b7460"/>
+<path d="M585.16 201.79V245.75" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="580.16" y="205.90" width="10" height="36.27" fill="#4b7460"/>
+<path d="M613.00 228.76V287.01" stroke="#4b7460" stroke-width="1.8"/>
+<rect x="608.00" y="237.78" width="10" height="15.46" fill="#4b7460"/>
+<text x="613.00" y="321" text-anchor="middle" font-size="15" fill="#5d727d">11/04</text>
+<text x="79" y="241.76" font-size="14" fill="#20394d">43,192–43,742</text>
+<text x="79" y="281.01" font-size="14" fill="#20394d">11/4 低點 41,856</text>
+</svg>
